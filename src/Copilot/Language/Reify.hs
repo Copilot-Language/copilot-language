@@ -15,7 +15,6 @@ module Copilot.Language.Reify
 import qualified Copilot.Core as Core
 import Copilot.Core (Typed, Id, typeOf, impossible)
 
---import Copilot.Language.Reify.Sharing (makeSharingExplicit)
 import Copilot.Language.Analyze (analyze)
 import Copilot.Language.Spec
 import Copilot.Language.Stream (Stream (..), Arg (..))
@@ -26,7 +25,6 @@ import System.Mem.StableName.Dynamic
 import System.Mem.StableName.Map (Map)
 import qualified System.Mem.StableName.Map as M
 import Control.Monad (liftM)
-import Debug.Trace
 --------------------------------------------------------------------------------
 
 reify :: Spec -> IO Core.Spec
@@ -43,7 +41,6 @@ reify spec =
     coreTriggers    <- mapM (mkTrigger  refMkId refVisited refMap) trigs
     coreObservers   <- mapM (mkObserver refMkId refVisited refMap) obsvs
     coreProperties  <- mapM (mkProperty refMkId refVisited refMap) props
-    --coreStructs     <- mapM (mkStruct   refMkId refVisited refMap) strs
     coreStreams     <- readIORef refMap
     return $
       Core.Spec
@@ -51,7 +48,6 @@ reify spec =
         , Core.specObservers  = coreObservers
         , Core.specTriggers   = coreTriggers
         , Core.specProperties = coreProperties }
-        --, Core.specStructs    = coreStructs }
 
 --------------------------------------------------------------------------------
 
@@ -113,29 +109,6 @@ mkProperty refMkId refStreams refMap (Property name guard) = do
 
 --------------------------------------------------------------------------------
 
---{-# INLINE mkStruct #-}
-{-mkStruct
-  :: IORef Int
-  -> IORef (Map Core.Id)
-  -> IORef [Core.Stream]
-  -> StructData
-  -> IO Core.StructData
-mkStruct refMkId refStreams refMap (StructData name fields) = do
-    fields' <- mapM mkStructField fields
-    return $
-      Core.StructData
-        { Core.structName    = name
-        , Core.structFields  = fields' }
-
-    where
-
-    mkStructField :: String -> Arg -> IO (Core.Name, Core.UExpr)
-    mkStructField cs (Arg e) = do
-      w <- mkExpr refMkId refStreams refMap e
-      return (cs, $ Core.UExpr typeOf w)
--}
---------------------------------------------------------------------------------
-
 
 {-# INLINE mkExpr #-}
 mkExpr
@@ -194,7 +167,7 @@ mkExpr refMkId refStreams refMap = go
 
       ------------------------------------------------------
 
-      Extern cs mXs -> trace (show cs) $ return $ Core.ExternVar typeOf cs mXs Nothing
+      Extern cs mXs -> return $ Core.ExternVar typeOf cs mXs Nothing
 
       ------------------------------------------------------
 
@@ -213,8 +186,8 @@ mkExpr refMkId refStreams refMap = go
 
       ------------------------------------------------------
 
-      ExternStruct cs sargs -> trace (show cs) $ do
-          args' <- mapM (\(name, Arg e) -> trace (show name) $ mkStrArg (name, Arg e)) sargs
+      ExternStruct cs sargs -> do
+          args' <- mapM (\(name, Arg e) -> mkStrArg (name, Arg e)) sargs
           return $ Core.ExternStruct typeOf cs args' Nothing
 
       ------------------------------------------------------
@@ -222,9 +195,6 @@ mkExpr refMkId refStreams refMap = go
       GetField struct field -> do
         s <- go struct
         return $ Core.GetField typeOf typeOf s field
-        {-  ISSUE: UNLIKE APPEND, GETFIELD DOES NOT HAVE CONSISTENT RETURN TYPE
-              --> NEED TO PROPERLY DEFINE GETFIELD IN EXPR
-                --> IMPLEMENT GETFIELD FROM CORE THROUGH LANGUAGE -}
 
       ------------------------------------------------------
 
@@ -258,31 +228,6 @@ mkExpr refMkId refStreams refMap = go
   mkStrArg (name, Arg e) = do
       w <- mkExpr refMkId refStreams refMap e
       return $ (name, Core.UExpr typeOf w)
-
-  {-mkStructArg :: StructArg -> IO Core.SExpr
-  mkStructArg (StructArg { name_ = n, arg' = Arg a }) = do
-      w <- mkExpr refMkId refStreams refMap a
-      return $ Core.SExpr n $ Core.UExpr typeOf w
--}
---------------------------------------------------------------------------------
-
---{-# INLINE mkStruct #-}
-{-mkStruct
-  :: IORef Int
-  -> IORef (Map Core.Id)
-  -> IORef [Core.Stream]
-  -> StructData
-  -> IO Core.StructData
-mkStruct refMkId refStreams refMap (StructData name sargs) = trace (show name) $ do
-  args' <- mapM mkStructArg sargs
-  return $
-    Core.StructData
-      { Core.structName     = name
-      , Core.structInst     = Core.ExternStruct typeOf "" args' Nothing }
-    where
-      mkStructArg (StructArg { name_ = n, arg' = Arg a }) = do
-        w <- mkExpr refMkId refStreams refMap a
-        return $ Core.SExpr n $ Core.UExpr typeOf w-}
 
 --------------------------------------------------------------------------------
 

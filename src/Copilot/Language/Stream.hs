@@ -12,7 +12,6 @@
 module Copilot.Language.Stream
   ( Stream (..) 
   , Arg (..) 
-  , StructArg (..)
   ) where
 
 import Copilot.Core (Typed, typeOf)
@@ -55,8 +54,6 @@ data Stream :: * -> * where
 
 data Arg where
   Arg :: Typed a => Stream a -> Arg
-
-data StructArg = StructArg { name_ :: String, arg' :: Arg }
 
 --------------------------------------------------------------------------------
 
