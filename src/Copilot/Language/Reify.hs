@@ -194,7 +194,7 @@ mkExpr refMkId refStreams refMap = go
 
       ------------------------------------------------------
 
-      Extern cs mXs -> trace (show cs) $ return $ Core.ExternVar typeOf cs mXs Nothing
+      Extern cs mXs -> trace (show cs) $ return $ Core.ExternVar typeOf cs mXs
 
       ------------------------------------------------------
 
