@@ -32,3 +32,8 @@ drop i s             = Drop (fromIntegral i)     s
 
 (#) :: (Typed a, Typed b) => Stream a -> String -> Stream b
 (#) = GetField
+{-(ExternStruct cs sargs) # (Extern nm i) 		 				= Extern nm i
+(ExternStruct cs sargs) # (ExternFun nm args i) 		= ExternFun nm args i
+(ExternStruct cs sargs) # (ExternArray nm strm j i)	= ExternArray nm strm j i
+(ExternStruct cs sargs) # (ExternStruct nm args)	  = ExternStruct nm args-}
+--(ExternStruct cs sargs) # name = GetField (ExternStruct cs sargs) name
