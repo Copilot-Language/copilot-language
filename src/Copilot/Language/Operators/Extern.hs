@@ -32,6 +32,18 @@ module Copilot.Language.Operators.Extern
   , externArrayI64
   , externArrayF
   , externArrayD
+  , externMatrix
+  , externMatrixB
+  , externMatrixW8
+  , externMatrixW16
+  , externMatrixW32
+  , externMatrixW64
+  , externMatrixI8
+  , externMatrixI16
+  , externMatrixI32
+  , externMatrixI64
+  , externMatrixF
+  , externMatrixD
   , externStruct
   , funArg -- * Deprecated.
   ) where
@@ -54,6 +66,11 @@ externFun = ExternFun
 externArray :: (Typed a, Typed b, Integral a)
             => String -> Stream a -> Size -> Maybe [[b]] -> Stream b
 externArray = ExternArray
+
+externMatrix :: (Typed a, Typed b, Integral a)
+              => String -> Stream a -> Stream a -> Size -> Size -> Maybe [[[b]]] -> Stream b
+externMatrix = ExternMatrix
+
 
 -- | Deprecated.
 funArg :: Typed a => Stream a -> Arg
@@ -144,3 +161,50 @@ externArrayD   :: (Typed a, Integral a)
                => String -> Stream a -> Size
                          -> Maybe [[Double]] -> Stream Double
 externArrayD   = externArray
+
+--------------------------------------------------------------------------------
+
+externMatrixB   :: (Typed a, Integral a)
+               => String -> Stream a -> Stream a -> Size -> Size
+                         -> Maybe [[[Bool]]] -> Stream Bool
+externMatrixB   = externMatrix
+externMatrixW8  :: (Typed a, Integral a)
+               => String -> Stream a -> Stream a -> Size -> Size
+                         -> Maybe [[[Word8]]] -> Stream Word8
+externMatrixW8  = externMatrix
+externMatrixW16 :: (Typed a, Integral a)
+               => String -> Stream a -> Stream a -> Size -> Size
+                         -> Maybe [[[Word16]]] -> Stream Word16
+externMatrixW16 = externMatrix
+externMatrixW32 :: (Typed a, Integral a)
+               => String -> Stream a -> Stream a -> Size -> Size
+                         -> Maybe [[[Word32]]] -> Stream Word32
+externMatrixW32 = externMatrix
+externMatrixW64 :: (Typed a, Integral a)
+               => String -> Stream a -> Stream a -> Size -> Size
+                         -> Maybe [[[Word64]]] -> Stream Word64
+externMatrixW64 = externMatrix
+externMatrixI8  :: (Typed a, Integral a)
+               => String -> Stream a -> Stream a -> Size -> Size
+                         -> Maybe [[[Int8]]] -> Stream Int8
+externMatrixI8  = externMatrix
+externMatrixI16 :: (Typed a, Integral a)
+               => String -> Stream a -> Stream a -> Size -> Size
+                         -> Maybe [[[Int16]]] -> Stream Int16
+externMatrixI16 = externMatrix
+externMatrixI32 :: (Typed a, Integral a)
+               => String -> Stream a -> Stream a -> Size -> Size
+                         -> Maybe [[[Int32]]] -> Stream Int32
+externMatrixI32 = externMatrix
+externMatrixI64 :: (Typed a, Integral a)
+               => String -> Stream a -> Stream a -> Size -> Size
+                         -> Maybe [[[Int64]]] -> Stream Int64
+externMatrixI64 = externMatrix
+externMatrixF   :: (Typed a, Integral a)
+               => String -> Stream a -> Stream a -> Size -> Size
+                         -> Maybe [[[Float]]] -> Stream Float
+externMatrixF   = externMatrix
+externMatrixD   :: (Typed a, Integral a)
+               => String -> Stream a -> Stream a -> Size -> Size
+                         -> Maybe [[[Double]]] -> Stream Double
+externMatrixD   = externMatrix

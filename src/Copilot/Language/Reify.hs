@@ -214,6 +214,13 @@ mkExpr refMkId refStreams refMap = go
 
     ------------------------------------------------------
 
+    ExternMatrix cs er ec rows cols mXs -> do
+      wr <- go er
+      wc <- go ec
+      return $ Core.ExternMatrix typeOf typeOf cs rows cols wr wc mXs Nothing
+
+    ------------------------------------------------------
+
     ExternStruct cs sargs -> do
       args' <- mapM (\(name, Arg e) -> mkStrArg (name, Arg e)) sargs
       return $ Core.ExternStruct typeOf cs args' Nothing

@@ -35,7 +35,7 @@ data Stream :: * -> * where
               => String -> [Arg] -> Maybe (Stream a) -> Stream a
   ExternArray :: (Typed a, Typed b, Integral a)
               => String -> Stream a -> Int -> Maybe [[b]] -> Stream b
-  ExternMatrix :: (Typed a, Typed b, Integral a)
+  ExternMatrix:: (Typed a, Typed b, Integral a)
               => String -> Stream a -> Stream a -> Int -> Int -> Maybe [[[b]]] -> Stream b
   ExternStruct:: Typed a
               => String -> [(String, Arg)] -> Stream a
