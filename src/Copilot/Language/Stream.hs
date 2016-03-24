@@ -27,16 +27,16 @@ data Stream :: * -> * where
   Append      :: Typed a
               => [a] -> Maybe (Stream Bool) -> Stream a -> Stream a
   Const       :: Typed a => a -> Stream a
-  Drop        :: Typed a
-              => Int -> Stream a -> Stream a
+  Matrix      :: (Typed a, Show a) => [[a]] -> Stream [[a]]
+  Drop        :: Typed a => Int -> Stream a -> Stream a
   Extern      :: Typed a
               => String -> Maybe [a] -> Stream a
   ExternFun   :: Typed a
               => String -> [Arg] -> Maybe (Stream a) -> Stream a
   ExternArray :: (Typed a, Typed b, Integral a)
               => String -> Stream a -> Int -> Maybe [[b]] -> Stream b
-  ExternMatrix:: (Typed a, Typed b, Integral a)
-              => String -> Stream a -> Stream a -> Int -> Int -> Maybe [[[b]]] -> Stream b
+  ExternMatrix:: (Typed a, Typed b, Integral a, Show b)
+              => String -> Stream a -> Stream a -> Int -> Int -> Maybe [[[b]]] -> Stream [[b]]
   ExternStruct:: Typed a
               => String -> [(String, Arg)] -> Stream a
   GetField    :: (Typed a, Typed b)

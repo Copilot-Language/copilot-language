@@ -137,6 +137,7 @@ analyzeExpr refStreams s = do
     case e0 of
       Append _ _ e        -> analyzeAppend refStreams dstn e () analyzeExpr
       Const _             -> return ()
+      Matrix _            -> return ()
       Drop k e1           -> analyzeDrop (fromIntegral k) e1
       Extern _ _          -> return ()
       ExternFun _ args me ->
@@ -361,6 +362,7 @@ collectExts refStreams stream_ env_ = do
       Append _ _ e           -> analyzeAppend refStreams dstn e env
                                   (\refs str -> collectExts refs str env)
       Const _                -> return env
+      Matrix _                -> return env
       Drop _ e1              -> go nodes env e1
       Extern name _          ->
         let ext = ( name, getSimpleType stream ) in
@@ -386,7 +388,7 @@ collectExts refStreams stream_ env_ = do
       ExternMatrix name idxr idxc _ _ _ -> do
         env' <- go nodes env idxr >>
                 go nodes env idxc
-        let mat = ( name, getSimpleType stream )
+        let mat = ( name, getMatrixType stream )
         return env' { externMatEnv = mat : externMatEnv env' }
 
       ExternStruct name sargs -> do
@@ -423,5 +425,9 @@ getArgName arg_stream =
 -}
 getSimpleType :: forall a. C.Typed a => Stream a -> C.SimpleType
 getSimpleType _ = C.simpleType (C.typeOf :: C.Type a)
+
+
+getMatrixType :: forall a. C.Typed a => Stream [[a]] -> C.SimpleType
+getMatrixType _ = C.simpleType (C.typeOf :: C.Type a)
 
 --------------------------------------------------------------------------------

@@ -7,6 +7,7 @@
 
 {-# LANGUAGE Trustworthy #-}
 {-# LANGUAGE ExistentialQuantification, Rank2Types #-}
+{-# LANGUAGE GADTs #-}
 
 module Copilot.Language.Reify
   ( reify
@@ -142,7 +143,7 @@ mkStruct refMkId refStreams refMap (StructData name fields) = do
 
 {-# INLINE mkExpr #-}
 mkExpr
-  :: Typed a
+  :: (Typed a)
   => IORef Int
   -> IORef (Map Core.Id)
   -> IORef [Core.Stream]
@@ -153,7 +154,7 @@ mkExpr refMkId refStreams refMap = go
 --  (>>= go) . makeSharingExplicit refMkId
 
   where
-  go :: Typed a => Stream a -> IO (Core.Expr a)
+  go :: (Typed a) => Stream a -> IO (Core.Expr a)
   go e0 = case e0 of
 
     ------------------------------------------------------
@@ -173,6 +174,10 @@ mkExpr refMkId refStreams refMap = go
     ------------------------------------------------------
 
     Const x -> return $ Core.Const typeOf x
+
+    ------------------------------------------------------
+
+    Matrix x -> return $ Core.Matrix typeOf x    
 
     ------------------------------------------------------
 
