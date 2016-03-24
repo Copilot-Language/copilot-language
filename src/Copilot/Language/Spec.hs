@@ -99,11 +99,11 @@ data SpecItem
 --------------------------------------------------------------------------------
 
 data Observer where
-  Observer :: Typed a => String -> Stream a -> Observer
+  Observer :: (Typed a) => String -> Stream a -> Observer
 
 --------------------------------------------------------------------------------
 
-observer :: Typed a => String -> Stream a -> Spec
+observer :: (Typed a) => String -> Stream a -> Spec
 observer name e = tell [ObserverItem $ Observer name e]
 
 --------------------------------------------------------------------------------
@@ -151,7 +151,7 @@ theorem name e (Proof p) = tell [TheoremItem (Property name (extractProp e), p)]
 
 --------------------------------------------------------------------------------
 
-arg :: Typed a => Stream a -> Arg
+arg :: (Typed a) => Stream a -> Arg
 arg = Arg
 
 --------------------------------------------------------------------------------

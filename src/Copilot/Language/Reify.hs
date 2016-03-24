@@ -301,7 +301,7 @@ mkStruct refMkId refStreams refMap (StructData name sargs) = trace (show name) $
 
 {-# INLINE mkStream #-}
 mkStream
-  :: Typed a
+  :: (Typed a)
   => IORef Int
   -> IORef (Map Core.Id)
   -> IORef [Core.Stream]
@@ -325,7 +325,7 @@ mkStream refMkId refStreams refMap e0 = do
 
   {-# INLINE addToVisited #-}
   addToVisited
-    :: Typed a
+    :: (Typed a)
     => DynStableName
     -> [a]
     -> Stream a

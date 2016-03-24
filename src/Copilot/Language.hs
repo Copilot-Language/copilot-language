@@ -24,6 +24,7 @@ module Copilot.Language
   , module Copilot.Language.Operators.Ord
   , module Copilot.Language.Operators.Temporal
   , module Copilot.Language.Operators.BitWise
+  , module Copilot.Language.Operators.Matrices
   , module Copilot.Language.Prelude
   , Spec
   , Stream
@@ -54,6 +55,7 @@ import Copilot.Language.Operators.Mux
 import Copilot.Language.Operators.Ord
 import Copilot.Language.Operators.Temporal
 import Copilot.Language.Operators.BitWise
+import Copilot.Language.Operators.Matrices
 import Copilot.Language.Reify
 import Copilot.Language.Prelude
 import Copilot.Language.Spec

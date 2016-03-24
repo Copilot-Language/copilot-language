@@ -27,15 +27,13 @@ data Stream :: * -> * where
   Append      :: Typed a
               => [a] -> Maybe (Stream Bool) -> Stream a -> Stream a
   Const       :: Typed a => a -> Stream a
-  Matrix      :: (Typed a, Show a) => [[a]] -> Stream [[a]]
-  Drop        :: Typed a => Int -> Stream a -> Stream a
-  Extern      :: Typed a
-              => String -> Maybe [a] -> Stream a
-  ExternFun   :: Typed a
-              => String -> [Arg] -> Maybe (Stream a) -> Stream a
+  Matrix      :: (Typed a) => [[a]] -> Stream [[a]]
+  Drop        :: (Typed a) => Int -> Stream a -> Stream a
+  Extern      :: (Typed a) => String -> Maybe [a] -> Stream a
+  ExternFun   :: (Typed a) => String -> [Arg] -> Maybe (Stream a) -> Stream a
   ExternArray :: (Typed a, Typed b, Integral a)
               => String -> Stream a -> Int -> Maybe [[b]] -> Stream b
-  ExternMatrix:: (Typed a, Typed b, Integral a, Show b)
+  ExternMatrix:: (Typed a, Typed b, Integral a)
               => String -> Stream a -> Stream a -> Int -> Int -> Maybe [[[b]]] -> Stream [[b]]
   ExternStruct:: Typed a
               => String -> [(String, Arg)] -> Stream a
@@ -43,7 +41,7 @@ data Stream :: * -> * where
               => Stream a -> String -> Stream b
   Local       :: (Typed a, Typed b)
               => Stream a -> (Stream a -> Stream b) -> Stream b
-  Var         :: Typed a
+  Var         :: (Typed a)
               => String -> Stream a
   Op1         :: (Typed a, Typed b)
               => Core.Op1 a b -> Stream a -> Stream b
@@ -56,7 +54,7 @@ data Stream :: * -> * where
 --------------------------------------------------------------------------------
 
 data Arg where
-  Arg :: Typed a => Stream a -> Arg
+  Arg :: (Typed a) => Stream a -> Arg
 
 data StructArg = StructArg { name_ :: String, arg' :: Arg }
 

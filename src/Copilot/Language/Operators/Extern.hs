@@ -67,13 +67,13 @@ externArray :: (Typed a, Typed b, Integral a)
             => String -> Stream a -> Size -> Maybe [[b]] -> Stream b
 externArray = ExternArray
 
-externMatrix :: (Typed a, Typed b, Integral a, Show b)
+externMatrix :: (Typed a, Typed b, Integral a)
               => String -> Stream a -> Stream a -> Size -> Size -> Maybe [[[b]]] -> Stream [[b]]
 externMatrix = ExternMatrix
 
 
 -- | Deprecated.
-funArg :: Typed a => Stream a -> Arg
+funArg :: (Typed a) => Stream a -> Arg
 funArg = Arg
 
 externStruct :: Typed a => String -> [(String, Arg)] -> Stream a
