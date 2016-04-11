@@ -170,7 +170,7 @@ analyzeExpr refStreams s = do
                                  SeenFun   -> throw NestedExternFun
                                  SeenArr   -> throw NestedArray
                                  SeenVector   -> throw NestedVector
-                                 SeenMatrix   -> throw NestedMatrix                           
+                                 SeenMatrix   -> throw NestedMatrix                          
       ExternMatrix _ _ _ _ -> case seenExt of
                                  SeenFun   -> throw NestedExternFun
                                  SeenArr   -> throw NestedArray
