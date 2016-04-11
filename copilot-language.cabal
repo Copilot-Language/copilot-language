@@ -54,6 +54,7 @@ library
                  , Copilot.Language.Operators.Mux
                  , Copilot.Language.Operators.Ord
                  , Copilot.Language.Operators.Temporal
+                 , Copilot.Language.Operators.Matrices
                  , Copilot.Language.Prelude
                  , Copilot.Language.Reify
   other-modules:   Copilot.Language.Analyze

@@ -5,6 +5,7 @@
 --
 
 {-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE GADTs #-}
 
 module Copilot.Language.Operators.Matrices
     where
@@ -14,33 +15,35 @@ import qualified Copilot.Core as C
 --import Copilot.Language.Prelude
 import Prelude
 
-validMatrix :: [[a]] -> Bool
-validMatrix [] = True
-validMatrix [_] = True
-validMatrix (r:r':m) = (length r == length r') && (validMatrix (r':m))
 
-matrixRowsNum :: [[a]] -> Int
-matrixRowsNum m = length m
+--validMatrix :: [[a]] -> Bool
+--validMatrix [] = True
+--validMatrix [_] = True
+--validMatrix (r:r':m) = (length r == length r') && (validMatrix (r':m))
 
-matrixColsNum :: [[a]] -> Int
-matrixColsNum [] = 0
-matrixColsNum m@(r:_)
-    | validMatrix m = length r
-    | otherwise = C.badUsage "The input is not a valid matrix"
+--matrixRowsNum :: [[a]] -> Int
+--matrixRowsNum m = length m
 
-matrixSum :: (Num a) => [[a]] -> [[a]] -> [[a]]
-matrixSum m1 m2
-    | (not (validMatrix m1)) || (not (validMatrix m2)) = C.badUsage "The input is not a valid matrix"
-    | validDim m1 m2 = zipWith (zipWith (+)) m1 m2
-    | otherwise = C.badUsage "matrixSum: Matrix dimension mismatch"
-    where
-        validDim m1 m2 = (matrixColsNum m1) == (matrixColsNum m2) && (matrixRowsNum m1) == (matrixRowsNum m2)    
+--matrixColsNum :: [[a]] -> Int
+--matrixColsNum [] = 0
+--matrixColsNum m@(r:_)
+--    | validMatrix m = length r
+--    | otherwise = C.badUsage "The input is not a valid matrix"
 
---matrixExprSum :: (Num a) => C.Expr [[a]] -> C.Expr [[a]] -> [[a]]
---matrixExprSum m1@(C.ExternMatrix _ _ _ _ _ _ _ _ _) m2@(C.ExternMatrix _ _ _ _ _ _ _ _ _) = matrixSum (C.evalExpr m1) (C.evalExpr m2)
---matrixExprSum m1@(C.ExternMatrix _ _ _ _ _ _ _ _ _) m2@(C.Matrix _ _) = matrixSum (C.evalExpr m1) (C.evalExpr m2)
---matrixExprSum m1@(C.Matrix _ _) m2@(C.ExternMatrix _ _ _ _ _ _ _ _ _) = matrixSum (C.evalExpr m1) (C.evalExpr m2)
---matrixExprSum m1@(C.Matrix _ _ _ _ _ _ _ _ _) m2@(C.Matrix _ _) = matrixSum (C.evalExpr m1) (C.evalExpr m2)
+--matrixSum :: (Num a) => [[a]] -> [[a]] -> [[a]]
+--matrixSum m1 m2
+--    | (not (validMatrix m1)) || (not (validMatrix m2)) = C.badUsage "The input is not a valid matrix"
+--    | validDim m1 m2 = zipWith (zipWith (+)) m1 m2
+--    | otherwise = C.badUsage "matrixSum: Matrix dimension mismatch"
+--    where
+--        validDim m1 m2 = (matrixColsNum m1) == (matrixColsNum m2) && (matrixRowsNum m1) == (matrixRowsNum m2)    
+
+--matrixExprSum :: (Num a) => C.Expr [[a]] -> C.Expr [[a]] -> C.Expr [[a]]
+----matrixExprSum m1@(C.ExternMatrix _ _ _ _ _ _ _ _ _) m2@(C.ExternMatrix _ _ _ _ _ _ _ _ _) = matrixSum (evalExpr k e locs strms) (evalExpr k e locs strms)
+----matrixExprSum m1@(C.ExternMatrix _ _ _ _ _ _ _ _ _) m2@(C.Matrix _ _) = matrixSum (evalExpr k e locs strms) (evalExpr k e locs strms)
+----matrixExprSum m1@(C.Matrix _ _) m2@(C.ExternMatrix _ _ _ _ _ _ _ _ _) = matrixSum (evalExpr k e locs strms) (evalExpr k e locs strms)
+--matrixExprSum (C.Matrix t1 m1) (C.Matrix t2 m2) | t1==t2 = C.Matrix t1 (matrixSum m1 m2)
+--											    | otherwise = C.badUsage "matrixSum: type mismatch"
 --matrixExprSum _ _ = C.badUsage "matrixSum expects two Matrices as input"
 
 

@@ -177,6 +177,10 @@ mkExpr refMkId refStreams refMap = go
 
     ------------------------------------------------------
 
+    Vector x -> return $ Core.Vector typeOf x
+
+    ------------------------------------------------------
+
     Matrix x -> return $ Core.Matrix typeOf x    
 
     ------------------------------------------------------
@@ -219,10 +223,13 @@ mkExpr refMkId refStreams refMap = go
 
     ------------------------------------------------------
 
-    ExternMatrix cs er ec rows cols mXs -> do
-      wr <- go er
-      wc <- go ec
-      return $ Core.ExternMatrix typeOf typeOf cs rows cols wr wc mXs Nothing
+    ExternVector cs size mXs ->
+      return $ Core.ExternVector typeOf cs size mXs Nothing
+
+    ------------------------------------------------------
+
+    ExternMatrix cs rows cols mXs ->
+      return $ Core.ExternMatrix typeOf cs rows cols mXs Nothing
 
     ------------------------------------------------------
 
