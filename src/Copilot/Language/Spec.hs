@@ -18,6 +18,7 @@ module Copilot.Language.Spec
   , Trigger (..)
   , trigger, triggers
   , arg
+  , arg_named
   , Property (..)
   , Prop (..)
   , prop, properties
@@ -152,7 +153,10 @@ theorem name e (Proof p) = tell [TheoremItem (Property name (extractProp e), p)]
 --------------------------------------------------------------------------------
 
 arg :: Typed a => Stream a -> Arg
-arg = Arg
+arg = Arg Nothing
+
+arg_named :: Typed a => String -> Stream a -> Arg
+arg_named n = Arg (Just n)
 
 --------------------------------------------------------------------------------
 

@@ -94,10 +94,10 @@ mkTrigger refMkId refStreams refMap (Trigger name guard args) = do
 
   where
 
-  mkTriggerArg :: Arg -> IO Core.UExpr
-  mkTriggerArg (Arg e) = do
+  mkTriggerArg :: Arg -> IO (Maybe String, Core.UExpr)
+  mkTriggerArg (Arg mn e) = do
     w <- mkExpr refMkId refStreams refMap e
-    return $ Core.UExpr typeOf w
+    return $ (mn, Core.UExpr typeOf w)
 
 --------------------------------------------------------------------------------
 
@@ -220,6 +220,7 @@ mkExpr refMkId refStreams refMap = go
 
     ------------------------------------------------------
 
+  {-
   mkFunArg :: Arg -> IO Core.UExpr
   mkFunArg (Arg e) = do
     w <- mkExpr refMkId refStreams refMap e
@@ -229,6 +230,7 @@ mkExpr refMkId refStreams refMap = go
   mkStrArg (name, Arg e) = do
     w <- mkExpr refMkId refStreams refMap e
     return $ (name, Core.UExpr typeOf w)
+  -}
 
   {-mkStructArg :: StructArg -> IO Core.SExpr
   mkStructArg (StructArg { name_ = n, arg' = Arg a }) = do

@@ -46,7 +46,7 @@ data Stream :: * -> * where
 --------------------------------------------------------------------------------
 
 data Arg where
-  Arg :: Typed a => Stream a -> Arg
+  Arg :: Typed a => Maybe String -> Stream a -> Arg
 
 data StructArg = StructArg { name_ :: String, arg' :: Arg }
 

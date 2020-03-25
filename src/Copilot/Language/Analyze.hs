@@ -94,7 +94,7 @@ analyzeTrigger refStreams (Trigger _ e0 args) =
 
   where
   analyzeTriggerArg :: Arg -> IO ()
-  analyzeTriggerArg (Arg e) = analyzeExpr refStreams e
+  analyzeTriggerArg (Arg _ e) = analyzeExpr refStreams e
 
 --------------------------------------------------------------------------------
 
@@ -285,7 +285,7 @@ specExts refStreams spec = do
   triggerExts :: ExternEnv -> Trigger -> IO ExternEnv
   triggerExts env (Trigger _ guard args) = do
     env' <- collectExts refStreams guard env
-    foldM (\env'' (Arg arg_) -> collectExts refStreams arg_ env'')
+    foldM (\env'' (Arg name_ arg_) -> collectExts refStreams arg_ env'')
           env' args
 
 collectExts :: C.Typed a => IORef Env -> Stream a -> ExternEnv -> IO ExternEnv

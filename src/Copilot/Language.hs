@@ -34,6 +34,7 @@ module Copilot.Language
   , observer
   , trigger
   , arg
+  , arg_named
   , prop
   , theorem
   , forall, exists

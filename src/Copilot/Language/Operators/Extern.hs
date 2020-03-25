@@ -35,7 +35,7 @@ extern = Extern
 
 -- | Deprecated.
 funArg :: Typed a => Stream a -> Arg
-funArg = Arg
+funArg = Arg Nothing
 
 --------------------------------------------------------------------------------
 
