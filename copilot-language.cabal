@@ -81,5 +81,6 @@ library
   if flag(arbitrary)
     hs-source-dirs: arbitrary
     build-depends: QuickCheck >= 2.13 && < 3
-    exposed-modules: Copilot.Language.Arbitrary.Bool
+    exposed-modules: Copilot.Language.Arbitrary
+                   , Copilot.Language.Arbitrary.Bool
                    , Copilot.Language.Arbitrary.Num
