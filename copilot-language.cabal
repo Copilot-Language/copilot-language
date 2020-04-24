@@ -84,3 +84,4 @@ library
     exposed-modules: Copilot.Language.Arbitrary
                    , Copilot.Language.Arbitrary.Bool
                    , Copilot.Language.Arbitrary.Num
+                   , Copilot.Language.Arbitrary.Spec
