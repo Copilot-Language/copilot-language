@@ -2,7 +2,7 @@
 
 module Copilot.Language.Arbitrary.Num () where
 
-import Prelude
+import Prelude            hiding ((++))
 
 import Test.QuickCheck
 
@@ -13,9 +13,16 @@ instance Arbitrary (Stream Int8) where
 
 gen_int :: (Integral a, Typed a, Arbitrary a) => Int -> Gen (Stream a)
 gen_int 0 = constant <$> arbitrary
-gen_int n = oneof [binop]
+gen_int n = frequency [ (n,   append)
+                      , (100, binop)
+                      ]
   where
     rec = gen_int (n `Prelude.div` 2)
+
+    append = do
+      buff <- arbitrary
+      s    <- rec
+      return $ buff ++ s
 
     binop = do
       op <- elements [(+), (-), (*)]
