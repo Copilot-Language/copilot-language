@@ -2,7 +2,7 @@
 
 module Copilot.Language.Arbitrary.Bool () where
 
-import Prelude            hiding ((&&), (||), not)
+import Prelude            hiding ((&&), (||), not, (++))
 
 import Test.QuickCheck    hiding ((==>))
 
@@ -12,9 +12,17 @@ instance Arbitrary (Stream Bool) where
   arbitrary = sized gen
     where
       gen 0 = elements [true, false]
-      gen n = oneof [unop, binop]
+      gen n = frequency [ (n,   append)
+                        , (100, unop)
+                        , (100, binop)
+                        ]
         where
           rec = gen (n `Prelude.div` 2)
+
+          append = do
+            buff <- arbitrary
+            s    <- rec
+            return $ buff ++ s
 
           unop = do
             op <- elements [not]
