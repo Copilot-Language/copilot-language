@@ -20,7 +20,7 @@ gen_int n = frequency [ (n,   append)
     rec = gen_int (n `Prelude.div` 2)
 
     append = do
-      buff <- arbitrary
+      buff <- listOf1 arbitrary
       s    <- rec
       return $ buff ++ s
 
