@@ -20,7 +20,7 @@ instance Arbitrary (Stream Bool) where
           rec = gen (n `Prelude.div` 2)
 
           append = do
-            buff <- arbitrary
+            buff <- listOf1 arbitrary
             s    <- rec
             return $ buff ++ s
 
