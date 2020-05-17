@@ -23,7 +23,14 @@ instance Arbitrary Spec where
   arbitrary = trigger <$> gen_cident <*> arbitrary <*> arbitrary
 
 instance Arbitrary Arg where
-  arbitrary = Arg <$> (arbitrary :: Gen (Stream Int8))
+  arbitrary = oneof [ Arg <$> (arbitrary :: Gen (Stream Int8))
+                    , Arg <$> (arbitrary :: Gen (Stream Int16))
+                    , Arg <$> (arbitrary :: Gen (Stream Int32))
+                    , Arg <$> (arbitrary :: Gen (Stream Int64))
+                    , Arg <$> (arbitrary :: Gen (Stream Word8))
+                    , Arg <$> (arbitrary :: Gen (Stream Word16))
+                    , Arg <$> (arbitrary :: Gen (Stream Word32))
+                    ]
 
 -- | Generate a valid C identifier name.
 gen_cident :: Gen String
