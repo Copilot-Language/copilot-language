@@ -85,3 +85,4 @@ library
                    , Copilot.Language.Arbitrary.Bool
                    , Copilot.Language.Arbitrary.Num
                    , Copilot.Language.Arbitrary.Spec
+    ghc-options: -Wno-orphans
