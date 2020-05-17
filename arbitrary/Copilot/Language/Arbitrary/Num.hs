@@ -11,6 +11,27 @@ import Copilot.Language
 instance Arbitrary (Stream Int8) where
   arbitrary = sized gen_int
 
+instance Arbitrary (Stream Int16) where
+  arbitrary = sized gen_int
+
+instance Arbitrary (Stream Int32) where
+  arbitrary = sized gen_int
+
+instance Arbitrary (Stream Int64) where
+  arbitrary = sized gen_int
+
+instance Arbitrary (Stream Word8) where
+  arbitrary = sized gen_int
+
+instance Arbitrary (Stream Word16) where
+  arbitrary = sized gen_int
+
+instance Arbitrary (Stream Word32) where
+  arbitrary = sized gen_int
+
+instance Arbitrary (Stream Word64) where
+  arbitrary = sized gen_int
+
 gen_int :: (Integral a, Typed a, Arbitrary a) => Int -> Gen (Stream a)
 gen_int 0 = constant <$> arbitrary
 gen_int n = frequency [ (n,   append)
