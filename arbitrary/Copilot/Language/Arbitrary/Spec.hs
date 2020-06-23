@@ -5,7 +5,7 @@ module Copilot.Language.Arbitrary.Spec () where
 
 import Test.QuickCheck
 
-import Copilot.Language            hiding (prettyPrint)
+import Copilot.Language            hiding (prettyPrint, div)
 import Copilot.Language.Reify
 import Copilot.Language.Stream            (Arg (..))
 import Copilot.Core.PrettyPrint           (prettyPrint)
@@ -20,7 +20,18 @@ instance {-# OVERLAPPING #-} Show Spec where
   show spec = (prettyPrint . unsafePerformIO . reify) spec
 
 instance Arbitrary Spec where
-  arbitrary = trigger <$> gen_cident <*> arbitrary <*> arbitrary
+  arbitrary = sized gen_spec
+    where
+      gen_spec n = do
+        frequency [ (1, gen_trig)
+                  , (n, rec n)
+                  ]
+      gen_trig = trigger <$> gen_cident <*> arbitrary <*> arbitrary
+
+      rec n = do
+        t  <- gen_trig
+        ts <- gen_spec (n `div` 3)
+        return $ t >> ts
 
 instance Arbitrary Arg where
   arbitrary = oneof [ Arg <$> (arbitrary :: Gen (Stream Int8))
